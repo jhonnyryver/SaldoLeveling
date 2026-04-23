@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
     <meta name="theme-color" content="#020617">
     <title>SISTEMA: SALDO VIVO</title>
     
@@ -22,9 +22,9 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; outline: none; }
-        body { background: var(--sys-bg); color: var(--text); display: flex; justify-content: center; min-height: 100vh; overflow: hidden; transition: 0.3s; }
+        body { background: var(--sys-bg); color: var(--text); display: flex; justify-content: center; height: 100dvh; overflow: hidden; transition: 0.3s; }
 
-        .app { width: 100%; max-width: 430px; height: 100vh; display: flex; flex-direction: column; position: relative; border-right: 1px solid #1e293b; border-left: 1px solid #1e293b; background: radial-gradient(circle at top, var(--sys-card) 0%, var(--sys-bg) 100%); }
+        .app { width: 100%; max-width: 430px; height: 100dvh; display: flex; flex-direction: column; position: relative; border-right: 1px solid #1e293b; border-left: 1px solid #1e293b; background: radial-gradient(circle at top, var(--sys-card) 0%, var(--sys-bg) 100%); overflow: hidden; }
 
         /* XP BAR */
         .xp-cont { position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: #000; z-index: 1000; }
@@ -50,7 +50,7 @@
         @keyframes fire-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); box-shadow: 0 0 var(--fire-glow) rgba(239, 68, 68, 0.3); } }
 
         /* SCREENS */
-        .screen { flex: 1; padding: 15px 20px 120px; overflow-y: auto; display: none; }
+        .screen { flex: 1; padding: 15px 20px 120px; overflow-y: auto; display: none; height: 100%; }
         .screen.active { display: block; animation: system-in 0.2s ease-out; }
         @keyframes system-in { from { opacity: 0; transform: scale(1.02); } to { opacity: 1; transform: scale(1); } }
 
@@ -71,19 +71,23 @@
         .skill.unlocked { opacity: 1; filter: grayscale(0); border-color: var(--sys-gold); color: var(--sys-gold); animation: skill-pulse 2s infinite ease-in-out; background: rgba(251, 191, 36, 0.05); }
         @keyframes skill-pulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 5px rgba(251, 191, 36, 0.3); } 50% { transform: scale(1.05); box-shadow: 0 0 15px rgba(251, 191, 36, 0.6); } }
 
-        /* CHAT & CALCULATOR */
-        .chat-wrap { display: flex; flex-direction: column; gap: 12px; padding-bottom: 40px; }
+        /* --- ESTRUTURA DO CHAT REFEITA PARA O TECLADO MOBILE --- */
+        #chat.active { display: flex !important; flex-direction: column; padding: 15px 15px 0 15px !important; overflow: hidden; }
+        .chat-wrap { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; padding-bottom: 15px; }
+        
         .msg { max-width: 85%; padding: 15px; font-size: 0.9rem; line-height: 1.4; border-radius: 2px; }
         .msg.bot { background: rgba(14, 165, 233, 0.05); border: 1px solid var(--sys-blue); border-left-width: 4px; color: #cbd5e1; }
         .msg.me { background: #1e293b; align-self: flex-end; border-right: 4px solid var(--sub); color: #fff; }
 
-        .input-container { position: absolute; bottom: 100px; left: 15px; right: 15px; display: flex; flex-direction: column; gap: 10px; z-index: 10; }
+        /* NOVO INPUT BOX - FLUXO RELATIVO */
+        .input-container { position: relative; bottom: 0; left: 0; right: 0; display: flex; flex-direction: column; gap: 10px; z-index: 150; margin-bottom: 100px; transition: margin-bottom 0.2s ease-out; }
+        
         .calc-box { background: var(--sys-card); border: 1px solid var(--sys-blue); border-radius: 4px; padding: 10px; display: none; grid-template-columns: repeat(4, 1fr); gap: 5px; box-shadow: 0 -10px 20px rgba(0,0,0,0.5); }
         .calc-btn { background: #1e293b; border: none; color: white; padding: 15px 5px; border-radius: 2px; font-weight: bold; cursor: pointer; font-size: 1rem; }
         .calc-btn.op { color: var(--sys-blue); }
 
         .input-bar { display: flex; gap: 10px; background: #0f172a; padding: 8px; border: 1px solid var(--sys-blue); border-radius: 4px; box-shadow: 0 0 25px rgba(0,0,0,0.5); align-items: center; }
-        .input-bar input { flex: 1; background: none; border: none; color: white; padding-left: 10px; font-size: 1rem; }
+        .input-bar input { flex: 1; background: none; border: none; color: white; padding-left: 10px; font-size: 1rem; outline: none; }
         .action-btn { background: var(--sys-blue); color: white; width: 44px; height: 44px; border: none; border-radius: 2px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
 
         /* MODAIS */
@@ -97,7 +101,7 @@
         .cp-btn-row { display: flex; gap: 10px; margin-top: 10px; }
         .cp-btn { flex: 1; padding: 12px; font-weight: 900; border: none; border-radius: 2px; cursor: pointer; text-transform: uppercase; }
 
-        /* SNA DUNGEON */
+        /* SNAKE DUNGEON */
         .game-container { width: 100%; display: flex; flex-direction: column; align-items: center; margin-top: 10px; }
         #snake-canvas { background: #000; border: 1px solid var(--sys-blue); width: 280px; height: 280px; }
         .d-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
@@ -106,7 +110,7 @@
         @keyframes glitch-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 
         /* NAV */
-        nav { position: absolute; bottom: 0; width: 100%; height: 85px; background: #020617; border-top: 1px solid #1e293b; display: flex; justify-content: space-around; padding-top: 10px; z-index: 100; }
+        nav { position: absolute; bottom: 0; width: 100%; height: 85px; background: #020617; border-top: 1px solid #1e293b; display: flex; justify-content: space-around; padding-top: 10px; z-index: 100; transition: transform 0.2s ease-out; }
         .nav-item { color: #475569; display: flex; flex-direction: column; align-items: center; font-size: 0.6rem; font-weight: 900; cursor: pointer; }
         .nav-item.active { color: var(--sys-blue); text-shadow: 0 0 10px var(--sys-blue); }
         .nav-item i { font-size: 24px; margin-bottom: 4px; }
@@ -115,19 +119,13 @@
         ::-webkit-scrollbar { width: 0; }
 
         /* TELA DE LOADING */
-        #splash-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: var(--sys-bg); z-index: 9999;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: opacity 0.5s ease-out, visibility 0.5s;
-        }
+        #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--sys-bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease-out, visibility 0.5s; }
         .splash-content { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 20px;}
         .splash-logo { width: 160px; height: 160px; border-radius: 24px; box-shadow: 0 0 30px rgba(14, 165, 233, 0.4); animation: pulse-glow 2s infinite ease-in-out; object-fit: cover;}
         .splash-title { color: var(--sys-blue); font-weight: 900; font-size: 1.2rem; letter-spacing: 4px; text-shadow: 0 0 15px var(--sys-blue); }
         .splash-loading-bar { width: 220px; height: 4px; background: #1e293b; border-radius: 2px; overflow: hidden; margin-top: 10px;}
         .splash-loading-fill { width: 0%; height: 100%; background: var(--sys-blue); box-shadow: 0 0 10px var(--sys-blue); transition: width 1.5s cubic-bezier(0.1, 0.7, 0.1, 1); }
         .splash-text { font-size: 0.7rem; color: var(--sub); text-transform: uppercase; letter-spacing: 2px; animation: blink 1s infinite; }
-        
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
         @keyframes pulse-glow { 0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(14, 165, 233, 0.3); } 50% { transform: scale(1.05); box-shadow: 0 0 50px rgba(14, 165, 233, 0.8); } }
     </style>
@@ -255,7 +253,7 @@
         <div id="chat" class="screen">
             <div class="chat-wrap" id="chat-ui"></div>
             
-            <div class="input-container">
+            <div class="input-container" id="input-box">
                 <div class="calc-box" id="calc-ui">
                     <button class="calc-btn" onclick="calcNum('7')">7</button><button class="calc-btn" onclick="calcNum('8')">8</button><button class="calc-btn" onclick="calcNum('9')">9</button><button class="calc-btn op" onclick="calcOp('/')">÷</button>
                     <button class="calc-btn" onclick="calcNum('4')">4</button><button class="calc-btn" onclick="calcNum('5')">5</button><button class="calc-btn" onclick="calcNum('6')">6</button><button class="calc-btn op" onclick="calcOp('*')">×</button>
@@ -266,7 +264,9 @@
                 <div class="input-bar">
                     <i class="ph ph-calculator" style="color:var(--sys-blue); cursor:pointer; font-size:24px;" onclick="toggleCalc()"></i>
                     <i class="ph ph-microphone" style="color:var(--sys-blue); cursor:pointer; font-size:24px;" onclick="ouvirVoz()"></i>
-                    <input type="text" id="input-ui" placeholder="Relatar ao Sistema..." autocomplete="off" autocorrect="off" spellcheck="false" data-lpignore="true">
+                    
+                    <input type="text" id="input-ui" placeholder="Relatar..." autocomplete="off" autocorrect="off" spellcheck="false" data-lpignore="true" onfocus="tecladoAtivo()" onblur="tecladoInativo()">
+                    
                     <button class="action-btn" onclick="enviarMensagem()"><i class="ph-fill ph-paper-plane-right"></i></button>
                 </div>
             </div>
@@ -280,7 +280,7 @@
                 <button onclick="toggleTheme()" style="width:100%; padding:15px; background:none; border:1px solid #333; color:white; margin-bottom:10px; text-align:left; cursor:pointer;">Alternar Tema (Hunter / Pro)</button>
                 <button onclick="exportarWA()" style="width:100%; padding:15px; background:rgba(14, 165, 233, 0.1); border:1px solid var(--sys-blue); color:var(--sys-blue); margin-bottom:20px; text-align:left; cursor:pointer; font-weight:bold;">Exportar Report (WhatsApp)</button>
                 
-                <div class="win-title" style="color:var(--sys-gold); border-bottom-color:rgba(251, 191, 36, 0.2);">COFRE DA GUILDA (BACKUP DE DADOS)</div>
+                <div class="win-title" style="color:var(--sys-gold); border-bottom-color:rgba(251, 191, 36, 0.2);">COFRE DA GUILDA</div>
                 <button onclick="gerarBackupLocal()" style="width:100%; padding:15px; background:rgba(251, 191, 36, 0.1); border:1px solid var(--sys-gold); color:var(--sys-gold); margin-bottom:10px; text-align:left; cursor:pointer; font-weight:bold;">Gerar Código de Backup (Salvar)</button>
                 <button onclick="restaurarBackupLocal()" style="width:100%; padding:15px; background:rgba(168, 85, 247, 0.1); border:1px solid var(--sys-purple); color:var(--sys-purple); margin-bottom:10px; text-align:left; cursor:pointer; font-weight:bold;">Restaurar Backup (Carregar)</button>
 
@@ -288,7 +288,7 @@
             </div>
         </div>
 
-        <nav>
+        <nav id="nav-menu">
             <div class="nav-item active" onclick="navegar('home', this)"><i class="ph-fill ph-user-focus"></i>STATUS</div>
             <div class="nav-item" onclick="navegar('inventory', this)"><i class="ph-fill ph-backpack"></i>ITENS</div>
             <div class="plus-btn" onclick="navegar('chat', this)"><i class="ph ph-plus"></i></div>
@@ -297,8 +297,7 @@
     </div>
 
     <script>
-        // CHAVE DE BANCO DE DADOS NOVA PARA ZERAR O APP
-        let db = JSON.parse(localStorage.getItem('sv_app_speed_v1')) || {
+        let db = JSON.parse(localStorage.getItem('sv_app_speed_v2')) || {
             lvl: 1, xp: 0, streak: 1, last: '', voice: true,
             trans: [], items: [], shadows: [],
             boss: { nome: 'PRIMEIRA DÍVIDA', total: 1000 },
@@ -307,11 +306,32 @@
 
         if(db.profile.theme === 'pro') document.body.classList.add('theme-pro');
 
-        function save() { localStorage.setItem('sv_app_speed_v1', JSON.stringify(db)); }
+        function save() { localStorage.setItem('sv_app_speed_v2', JSON.stringify(db)); }
         window.addEventListener('beforeunload', save);
         document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') save(); });
 
-        // --- SISTEMA DE MODAL CUSTOMIZADO ---
+        // --- SOLUÇÃO DE ENGENHARIA PARA O TECLADO MOBILE ---
+        function tecladoAtivo() {
+            // Esconde a barra de navegação para evitar cliques fantasmas e liberar espaço
+            document.getElementById('nav-menu').style.display = 'none';
+            // Zera a margem para o input colar no topo do teclado perfeitamente
+            document.getElementById('input-box').style.marginBottom = '15px';
+            
+            // Força a tela a mostrar a última mensagem enviada ou o input
+            setTimeout(() => {
+                const c = document.getElementById('chat-ui');
+                c.scrollTop = c.scrollHeight;
+                document.getElementById('input-ui').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 150);
+        }
+
+        function tecladoInativo() {
+            // Quando o teclado desce, a barra de navegação volta ao normal
+            document.getElementById('nav-menu').style.display = 'flex';
+            document.getElementById('input-box').style.marginBottom = '100px';
+        }
+
+        // --- SISTEMA DE MODAIS ---
         let promptCallback = null;
         
         function openPrompt(title, placeholders, callback, isConfirm = false, msg = "") {
@@ -411,7 +431,6 @@
             document.getElementById('sys-modal-btn').onclick = closeModal;
         }
 
-        // --- BACKUP MANUAL MELHORADO COM O NOVO BOTÃO DE FECHAR (X) ---
         function gerarBackupLocal() {
             save(); 
             const dataStr = btoa(encodeURIComponent(JSON.stringify(db)));
@@ -431,7 +450,7 @@
 
         function closeModal() { document.getElementById('sys-modal').style.display = 'none'; }
 
-        // MOTOR DE AUDIO OTIMIZADO
+        // --- SISTEMAS INTERNOS (AUDIO, FOTO, VOZ) ---
         function wakeAudio() { document.querySelectorAll('audio').forEach(a => { a.play().then(() => a.pause()).catch(()=>{}); }); }
         function tocarSom(id) {
             let audio = document.getElementById(id);
@@ -684,7 +703,43 @@
         function addMsg(t, s) { const c = document.getElementById('chat-ui'); const d = document.createElement('div'); d.className = `msg ${s}`; d.innerText = t; c.appendChild(d); c.scrollTop = c.scrollHeight; }
         function navegar(id, btn) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active')); document.getElementById(id).classList.add('active'); if(btn) btn.classList.add('active'); if(id==='chat' && document.getElementById('chat-ui').children.length===0) { const m = `[O ARQUITETO] O Sistema aguarda, ${db.profile.name}.`; addMsg(m,'bot'); falar(m); } }
         
-        function ouvirVoz() { const rec = new (window.SpeechRecognition || window.webkitSpeechRecognition)(); rec.lang = 'pt-BR'; rec.onresult = (e) => { document.getElementById('input-ui').value = e.results[0][0].transcript; enviarMensagem(); }; rec.start(); }
+        function ouvirVoz() { 
+            if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
+                alertCustom("FALHA DE COMUNICAÇÃO", "O motor de voz não funciona nativamente em APKs simples. Use via Navegador Google Chrome para utilizar o microfone.");
+                return;
+            }
+            try {
+                const rec = new (window.SpeechRecognition || window.webkitSpeechRecognition)(); 
+                rec.lang = 'pt-BR'; 
+                
+                rec.onstart = () => {
+                    document.getElementById('sys-modal').style.display = 'block';
+                    document.querySelector('#sys-modal div:nth-child(2)').innerText = "MODO DE ESCUTA ATIVO";
+                    document.getElementById('modal-desc').innerHTML = "<div style='text-align:center; padding:10px;'><i class='ph-fill ph-microphone' style='font-size:40px; color:var(--sys-blue); animation: pulse-glow 1.5s infinite;'></i><br><br><b style='color:#fff'>Fale agora, Hunter...</b></div>";
+                    const btn = document.getElementById('sys-modal-btn');
+                    btn.innerText = "CANCELAR ESCUTA";
+                    btn.onclick = () => { rec.stop(); closeModal(); };
+                };
+                
+                rec.onresult = (e) => { 
+                    document.getElementById('input-ui').value = e.results[0][0].transcript; 
+                    closeModal();
+                    enviarMensagem(); 
+                }; 
+                
+                rec.onerror = (e) => {
+                    closeModal();
+                    if (e.error === 'not-allowed') {
+                        alertCustom("PERMISSÃO NEGADA", "O Android bloqueou o microfone deste app. Permita nas configurações do celular ou abra direto no Chrome.");
+                    } else {
+                        alertCustom("BLOQUEIO DO SISTEMA", `Erro no motor de voz (${e.error}).`);
+                    }
+                };
+                rec.start(); 
+            } catch (e) {
+                alertCustom("ERRO CRÍTICO", "Falha ao iniciar o módulo de voz.");
+            }
+        }
 
         window.addEventListener('load', () => {
             setTimeout(() => { document.getElementById('splash-fill').style.width = '100%'; }, 100);
